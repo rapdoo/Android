@@ -2,10 +2,14 @@ package kr.inmo.retrofittutorialapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,9 +31,31 @@ class MainActivity : AppCompatActivity() {
 //        GlobalScope.launch(Dispatchers.IO) {
 //        }
 
+        val gson = GsonBuilder().serializeNulls().create()
+
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(object  : Interceptor {
+                override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
+                    val originalRequest = chain.request()
+
+                    val newRequest = originalRequest.newBuilder()
+                        .header("Interceptor-Header", "xyz")
+                        .build()
+
+                    return chain.proceed(newRequest)
+                }
+            })
+            .addInterceptor(loggingInterceptor)
+            .build()
+
         val retrofit = Retrofit.Builder()
             .baseUrl("https://jsonplaceholder.typicode.com/")
-            .addConverterFactory(GsonConverterFactory.create())
+            //.addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(okHttpClient)
             .build()
 
         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi::class.java)
@@ -37,8 +63,8 @@ class MainActivity : AppCompatActivity() {
         //getPosts()
         //getComments()
         //createPost()
-        //updatePost()
-        deletePost()
+        updatePost()
+        //deletePost()
     }
 
     fun getPosts() {
@@ -163,7 +189,13 @@ class MainActivity : AppCompatActivity() {
 
         val post = Post(12, null, "Next Text")
 
-        val call : Call<Post> = jsonPlaceHolderApi.putPost(5, post)
+        val headers = HashMap<String, String>()
+        headers.put("Map-Header1", "def")
+        headers.put("Map-Header2", "ghi")
+
+        //val call : Call<Post> = jsonPlaceHolderApi.putPost(5, post)
+        //val call : Call<Post> = jsonPlaceHolderApi.putPost("abc",5, post)
+        val call : Call<Post> = jsonPlaceHolderApi.patchPost(headers,5, post)
 
         call.enqueue(object  : Callback<Post> {
 
