@@ -35,7 +35,10 @@ class MainActivity : AppCompatActivity() {
         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi::class.java)
 
         //getPosts()
-        getComments()
+        //getComments()
+        //createPost()
+        //updatePost()
+        deletePost()
     }
 
     fun getPosts() {
@@ -115,5 +118,98 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
+    }
+
+    fun createPost() {
+        val post = Post(23, "New Title", "New Text")
+        val fields = HashMap<String, String>()
+        fields.put("userId", "25")
+        fields.put("title", "New Title")
+
+        //val call : Call<Post> = jsonPlaceHolderApi.createPost(post)
+        //val call : Call<Post> = jsonPlaceHolderApi.createPost(23, "New Title", "New Text")
+        val call : Call<Post> = jsonPlaceHolderApi.createPost(fields)
+
+        call.enqueue(object  : Callback<Post> {
+
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+
+                if(!response.isSuccessful) {
+                    text_view_result.text = "Code: ${response.code()}"
+                    return
+                }
+
+                val postResponse : Post? = response.body()
+
+                var content = ""
+                content += "Code: ${response.code()}\n"
+                content += "ID: ${postResponse?.id}\n"
+                content += "Post ID: ${postResponse?.userId}\n"
+                content += "Name: ${postResponse?.title}\n"
+                content += "Text: ${postResponse?.text}\n\n"
+
+                text_view_result.text = content
+
+            }
+
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+
+                text_view_result.text = t.message
+            }
+        })
+    }
+
+    fun updatePost() {
+
+        val post = Post(12, null, "Next Text")
+
+        val call : Call<Post> = jsonPlaceHolderApi.putPost(5, post)
+
+        call.enqueue(object  : Callback<Post> {
+
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+
+                if(!response.isSuccessful) {
+                    text_view_result.text = "Code: ${response.code()}"
+                    return
+                }
+
+                val postResponse : Post? = response.body()
+
+                var content = ""
+                content += "Code: ${response.code()}\n"
+                content += "ID: ${postResponse?.id}\n"
+                content += "Post ID: ${postResponse?.userId}\n"
+                content += "Name: ${postResponse?.title}\n"
+                content += "Text: ${postResponse?.text}\n\n"
+
+                text_view_result.text = content
+
+            }
+
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+
+                text_view_result.text = t.message
+
+            }
+        })
+    }
+
+    fun deletePost() {
+
+        val call : Call<Unit> = jsonPlaceHolderApi.deletePost(5)
+
+        call.enqueue(object : Callback<Unit> {
+
+            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+
+                text_view_result.text = "Code: ${response.code()}"
+            }
+
+            override fun onFailure(call: Call<Unit>, t: Throwable) {
+                text_view_result.text = t.message
+            }
+        })
+
     }
 }
