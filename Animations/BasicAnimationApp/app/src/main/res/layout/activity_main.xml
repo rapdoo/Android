@@ -7,14 +7,75 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/move_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:text="Move Animation"
+        android:text="Move"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/rotate_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Rotate"
+        app:layout_constraintEnd_toEndOf="@+id/move_button"
+        app:layout_constraintStart_toStartOf="@+id/move_button"
+        app:layout_constraintTop_toBottomOf="@+id/move_button" />
+
+    <Button
+        android:id="@+id/blink_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Blink"
+        app:layout_constraintEnd_toEndOf="@+id/rotate_button"
+        app:layout_constraintStart_toStartOf="@+id/rotate_button"
+        app:layout_constraintTop_toBottomOf="@+id/rotate_button" />
+
+    <Button
+        android:id="@+id/slide_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Slide"
+        app:layout_constraintEnd_toEndOf="@+id/blink_button"
+        app:layout_constraintStart_toStartOf="@+id/blink_button"
+        app:layout_constraintTop_toBottomOf="@+id/blink_button" />
+
+    <Button
+        android:id="@+id/fade_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Fade"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="@+id/slide_button"
+        app:layout_constraintStart_toStartOf="@+id/slide_button"
+        app:layout_constraintTop_toBottomOf="@+id/slide_button" />
+
+    <Button
+        android:id="@+id/zoom_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Zoom"
+        app:layout_constraintEnd_toEndOf="@+id/fade_button"
+        app:layout_constraintStart_toStartOf="@+id/fade_button"
+        app:layout_constraintTop_toBottomOf="@+id/fade_button" />
+
+    <Button
+        android:id="@+id/bounce_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Bounce"
+        app:layout_constraintEnd_toEndOf="@+id/zoom_button"
+        app:layout_constraintStart_toStartOf="@+id/zoom_button"
+        app:layout_constraintTop_toBottomOf="@+id/zoom_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
